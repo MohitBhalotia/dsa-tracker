@@ -1,0 +1,15 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="#1C1917"/>
+  <rect x="4.75" y="4.75" width="54.5" height="54.5" rx="15.25" stroke="#FAF7F0" stroke-opacity="0.12" stroke-width="1.5"/>
+  <path d="M18 43.5L27 34.5L34.5 39L47 22" stroke="#A7E5D3" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="17" y="17" width="8" height="8" rx="2.5" fill="#FAF7F0" fill-opacity="0.92"/>
+  <rect x="29" y="17" width="8" height="8" rx="2.5" fill="#FAF7F0" fill-opacity="0.36"/>
+  <rect x="41" y="17" width="8" height="8" rx="2.5" fill="#F4C5A8" fill-opacity="0.9"/>
+  <rect x="17" y="29" width="8" height="8" rx="2.5" fill="#FAF7F0" fill-opacity="0.36"/>
+  <rect x="29" y="29" width="8" height="8" rx="2.5" fill="#FAF7F0" fill-opacity="0.18"/>
+  <rect x="41" y="29" width="8" height="8" rx="2.5" fill="#FAF7F0" fill-opacity="0.28"/>
+  <rect x="17" y="41" width="8" height="8" rx="2.5" fill="#A7E5D3"/>
+  <rect x="29" y="41" width="8" height="8" rx="2.5" fill="#FAF7F0" fill-opacity="0.28"/>
+  <rect x="41" y="41" width="8" height="8" rx="2.5" fill="#FAF7F0" fill-opacity="0.18"/>
+  <path d="M19.5 45L21.5 47L25.5 42.5" stroke="#1C1917" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
