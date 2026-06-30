@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type Dispatch, type SetStateAction, type TransitionStartFunction } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Bookmark, CheckCircle2, ChevronDown, ChevronRight, NotebookPen } from "lucide-react";
 import { toggleBookmark, toggleSolved, updateQuestionNotes } from "@/actions/progress.actions";
 import { PlatformIcon } from "@/components/resources/platform-icon";
@@ -8,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
+import { queryKeys } from "@/lib/api/client";
 import { cn } from "@/lib/utils";
 import type { DbQuestionWithPlacement } from "@/lib/db/queries";
 
@@ -139,6 +141,7 @@ export function SheetAccordion({
   noteOverrides: Record<string, string>;
   setNoteOverrides: Dispatch<SetStateAction<Record<string, string>>>;
 }) {
+  const queryClient = useQueryClient();
   const sections = useMemo(() => groupQuestions(questions), [questions]);
   const [openSections, setOpenSections] = useState<Set<string>>(new Set());
   const [openLectures, setOpenLectures] = useState<Set<string>>(new Set());
@@ -253,6 +256,12 @@ export function SheetAccordion({
                                       startTransition(async () => {
                                         setOptimisticSolved({ id: question.id, value: next });
                                         await toggleSolved({ sheetSlug, questionSourceId: question.id });
+                                        await Promise.all([
+                                          queryClient.invalidateQueries({ queryKey: queryKeys.dashboard }),
+                                          queryClient.invalidateQueries({ queryKey: queryKeys.sheets }),
+                                          queryClient.invalidateQueries({ queryKey: ["sheet-detail"] }),
+                                          queryClient.invalidateQueries({ queryKey: queryKeys.revisions }),
+                                        ]);
                                       });
                                     }}
                                   >
@@ -299,6 +308,7 @@ export function SheetAccordion({
                                         startTransition(async () => {
                                           setOptimisticBookmarked({ id: question.id, value: next });
                                           await toggleBookmark({ sheetSlug, questionSourceId: question.id });
+                                          await queryClient.invalidateQueries({ queryKey: ["sheet-detail"] });
                                         });
                                       }}
                                     >
@@ -346,6 +356,8 @@ export function SheetAccordion({
                 const notes = String(formData.get("notes") || "");
                 setNoteOverrides((current) => ({ ...current, [notesQuestion.id]: notes }));
                 await updateQuestionNotes(formData);
+                await queryClient.invalidateQueries({ queryKey: ["sheet-detail"] });
+                await queryClient.invalidateQueries({ queryKey: queryKeys.question(notesQuestion.id) });
                 setNotesQuestion(null);
               }}
               className="flex min-h-0 flex-1 flex-col gap-4 px-4 pb-4"

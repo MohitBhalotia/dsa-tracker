@@ -63,7 +63,7 @@ export function SheetWorkspace({
       title={title}
       description={description}
       options={options}
-      filters={filters}
+      filters={{ ...filters, q: filters.query }}
       summary={{
         solvedCount,
         shownCount: questions.length,
