@@ -139,6 +139,37 @@ export async function recordRevision(rawInput: z.input<typeof progressInput>) {
   return { ok: true };
 }
 
+export async function resetSheetProgress(rawInput: { sheetSlug?: string }) {
+  const user = await requireUser();
+  const input = z.object({ sheetSlug: z.string().min(1).default("strivers-a2z-dsa-sheet") }).parse(rawInput);
+  await connectToDatabase();
+  const sheet = await Sheet.findOne({ slug: input.sheetSlug });
+  if (!sheet) throw new Error("Sheet was not imported yet.");
+
+  const scope = { userId: user.id, sheetId: sheet._id };
+  const [progress, bookmarks, revisions, activity] = await Promise.all([
+    UserProgress.deleteMany(scope),
+    Bookmark.deleteMany(scope),
+    Revision.deleteMany(scope),
+    ActivityLog.deleteMany(scope),
+  ]);
+
+  revalidatePath("/dashboard");
+  revalidatePath("/sheets");
+  revalidatePath(`/sheets/${input.sheetSlug}`);
+  revalidatePath("/revisions");
+
+  return {
+    ok: true,
+    deleted: {
+      progress: progress.deletedCount || 0,
+      bookmarks: bookmarks.deletedCount || 0,
+      revisions: revisions.deletedCount || 0,
+      activity: activity.deletedCount || 0,
+    },
+  };
+}
+
 export async function toggleSolvedFromForm(formData: FormData) {
   await toggleSolved({
     sheetSlug: String(formData.get("sheetSlug") || "strivers-a2z-dsa-sheet"),

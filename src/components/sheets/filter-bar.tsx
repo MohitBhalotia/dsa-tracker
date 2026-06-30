@@ -67,6 +67,7 @@ export function FilterBar({
   options,
   filters = {},
   summary,
+  actions,
   children,
 }: {
   basePath?: string;
@@ -75,6 +76,7 @@ export function FilterBar({
   options: FilterOptions;
   filters?: ActiveFilters;
   summary: FilterSummary;
+  actions?: React.ReactNode;
   children?: React.ReactNode;
 }) {
   const [query, setQuery] = useState(filters.q || "");
@@ -129,7 +131,7 @@ export function FilterBar({
 
   return (
     <div className="mb-5 rounded-xl border bg-card shadow-sm">
-      <div className="grid gap-4 border-b p-4 lg:grid-cols-[minmax(0,1fr)_128px] lg:items-center">
+      <div className="grid gap-4 border-b p-4 lg:grid-cols-[minmax(0,1fr)_auto_128px] lg:items-center">
         <div className="min-w-0">
           {title ? <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1> : null}
           {description ? (
@@ -138,6 +140,8 @@ export function FilterBar({
             </p>
           ) : null}
         </div>
+
+        {actions ? <div className="flex items-center justify-start lg:justify-end">{actions}</div> : null}
 
         <div className="group relative size-28 justify-self-start outline-none lg:justify-self-end" tabIndex={0}>
           <div

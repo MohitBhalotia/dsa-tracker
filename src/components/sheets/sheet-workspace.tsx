@@ -2,6 +2,7 @@
 
 import { useMemo, useOptimistic, useState, useTransition } from "react";
 import { FilterBar } from "@/components/sheets/filter-bar";
+import { ResetProgressDialog } from "@/components/sheets/reset-progress-dialog";
 import { SheetAccordion } from "@/components/sheets/sheet-accordion";
 import type { DbQuestionWithPlacement, SheetFilters } from "@/lib/db/queries";
 import type { Difficulty } from "@/types/seed";
@@ -72,6 +73,7 @@ export function SheetWorkspace({
         dueCount,
         solvedByDifficulty,
       }}
+      actions={<ResetProgressDialog sheetSlug={sheetSlug} />}
     >
       <SheetAccordion
         questions={questions}
